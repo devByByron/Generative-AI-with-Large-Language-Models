@@ -1,5 +1,17 @@
 # Generative-AI-with-Large-Language-Models
 
+**Week 1 Recap**
+
+1. Use cases of LLMs → essay writing, dialogue, summarization, translation.
+2. Transformer architecture → foundation of LLMs.
+3. Inference-time parameters → control generation.
+4. Generative AI lifecycle → framework for project development.
+5. Pretraining → how LLMs learn language.
+6. Compute challenges → GPUs, quantization to fit models.
+7. Scaling laws → balance between parameters, dataset size, and compute for optimal training.
+8. Domain-specific models (e.g., BloombergGPT) → sometimes need pretraining from scratch.
+
+
 
 **LLM Use Cases and Tasks:**
 
@@ -166,17 +178,17 @@ Strategy: add examples inside the prompt → model performs better.
 
 This technique is called in-context learning.
 
-🤖 Inference Types (How the model learns from the prompt)
+🤖 **Inference Types (How the model learns from the prompt)**
 
-Zero-shot → No examples, just instructions.
+**Zero-shot** → No examples, just instructions.
 
 e.g., “Translate this sentence into Spanish.”
 
-One-shot → One example given.
+**One-shot** → One example given.
 
 e.g., Show 1 translation before asking for another.
 
-Few-shot → Several examples given.
+**Few-shot** → Several examples given.
 
 e.g., Provide multiple translations, then ask for a new one.
 
@@ -303,4 +315,213 @@ LLMs have limits:
 - To fix this, you may need extra tools like:
 - Databases for facts.
 - External reasoning systems (like calculators, search, or APIs).
+
+Steps Before Building a Generative AI App
+
+First, define your use case (what your app should do).
+
+Then, decide which model to use:
+
+Use an existing model (most common).
+
+Or train your own model (rare, usually only if you have a very special need).
+
+Finding Models
+
+Platforms like Hugging Face and PyTorch have model hubs.
+
+Each model has a model card explaining:
+
+What it’s good for
+
+How it was trained
+
+Its limitations
+
+Training of Large Language Models (LLMs)
+
+LLMs are trained in a process called pre-training.
+
+They learn from huge amounts of text (internet, books, datasets).
+
+Training uses GPUs and lots of compute power.
+
+Only 1–3% of the collected text usually ends up being used (after cleaning for quality & bias).
+
+**Types of Transformer Models**
+
+**Encoder-only (Autoencoding Models)**
+
+- Learn by predicting missing words (masked language modeling).
+- Understand the full context of a sentence (both left & right). (bi-directional)
+- Best for classification tasks (e.g., sentiment analysis, named entity recognition).
+
+Examples: BERT, RoBERTa
+
+**Decoder-only (Autoregressive Models)**
+
+- Learn by predicting the next word in a sequence.
+- Context is one-directional (only past words, not future).
+- Best for text generation (chatbots, story writing).
+
+Examples: GPT, BLOOM
+
+**Encoder–Decoder (Sequence-to-Sequence Models)**
+
+- Encoder reads the input, decoder generates the output.
+- Useful when both input and output are text.
+- Best for translation, summarization, question-answering.
+
+Examples: T5, BART
+
+**Model Size**
+
+- Bigger models usually perform better.
+- Growth of models is like a new Moore’s law (steadily increasing size & power).
+- But: Training huge models is very expensive and hard to sustain.
+
+<img width="764" height="413" alt="image" src="https://github.com/user-attachments/assets/2a040708-7c49-45dc-9319-77c6433c2350" />
+
+
+**The Problem: Running Out of Memory**
+
+- Large Language Models (LLMs) are huge.
+- Each model parameter takes up memory.
+- One parameter (32-bit float) = 4 bytes.
+
+Example: 1 billion parameters → 4 GB just to store the weights.
+
+But training also needs memory for:
+
+Gradients
+
+Optimizer states
+
+Activations
+
+Temporary variables
+
+This means training can require 6× more memory (≈24 GB for 1B parameters).
+
+Consumer GPUs usually don’t have enough memory.
+
+The Solution: Quantization
+
+👉 Quantization = store numbers in lower precision formats to save memory.
+
+Common Types:
+
+FP32 (32-bit float)
+
+Default, very precise.
+
+Range: -3×10^38 to +3×10^38.
+
+Uses 4 bytes per number.
+
+FP16 (16-bit float)
+
+Less precise but smaller.
+
+Range: about -65,504 to +65,504.
+
+Uses 2 bytes per number (saves 50% memory).
+
+BF16 (Brain Floating Point 16)
+
+Google’s version of FP16.
+
+Keeps the large range of FP32, but lower precision.
+
+Good balance → saves memory and stable for training.
+
+Used in many modern LLMs (e.g., FLAN-T5).
+
+INT8 (8-bit integer)
+
+Very small memory (only 1 byte per number).
+
+But loses a lot of precision.
+
+Range: -128 to +127.
+
+Trade-offs
+
+FP16 & BF16 → Good memory savings, still accurate enough.
+
+INT8 → Big savings, but may harm accuracy.
+
+Quantization doesn’t reduce parameters — it just changes how they’re stored.
+
+Scaling Beyond One GPU
+
+Models today often have 50B–100B+ parameters.
+
+Memory needs grow 500× bigger than the 1B example.
+
+Impossible to train such models on a single GPU.
+
+Solution → distributed training (using many GPUs at once).
+
+But this is very expensive → another reason why most people use existing pre-trained models instead of training from scratch.
+
+🔑 Key Ideas
+
+Goal of pretraining → minimize test loss when predicting tokens.
+
+You can improve performance by:
+
+Increasing dataset size.
+
+Increasing model size (# parameters).
+
+Constraint: Compute budget → how much hardware, time, and money you have.
+
+💻 Compute Budget
+
+Measured in petaFLOP/s-days:
+
+1 petaFLOP/s-day = 1 quadrillion floating-point operations per second for one day.
+
+Roughly = 8× NVIDIA V100 GPUs running for a day, or 2× A100 GPUs.
+
+Larger models → need much higher compute.
+
+Example: GPT-3 (175B params) ≈ 3,700 petaFLOP/s-days.
+
+📈 **Scaling Laws**
+
+Researchers found power-law relationships between:
+
+Compute budget vs. performance → more compute = lower test loss.
+
+Dataset size vs. performance (with compute & model size fixed).
+
+Model size vs. performance (with compute & dataset fixed).
+
+Implication → balance matters. You can’t just scale one dimension (parameters, data, or compute) infinitely.
+
+🐹 The Chinchilla Paper (Hoffmann et al., 2022)
+
+Showed many LLMs (like GPT-3) were over-parameterized and under-trained.
+
+**Key finding:**
+
+Optimal dataset size ≈ 20× number of parameters.
+
+Example: 70B parameter model → 1.4 trillion tokens dataset.
+
+Models trained under this principle (e.g., Chinchilla) outperform larger but under-trained ones.
+
+LLaMA (70B, trained on ~1.4T tokens) is near compute-optimal.
+
+BloombergGPT (50B params, compute-optimal) shows strong task-specific performance.
+
+🚨 **Implications**
+
+Bigger is not always better.
+
+Expect a shift away from just scaling parameter count → toward compute-optimal training.
+
+Smaller, well-trained models may rival or surpass much larger ones.
 
