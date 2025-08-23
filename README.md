@@ -525,3 +525,284 @@ Expect a shift away from just scaling parameter count → toward compute-optimal
 
 Smaller, well-trained models may rival or surpass much larger ones.
 
+**Instruction Fine-tuning**
+
+1. Why Fine-Tune?
+
+Large models can follow instructions (zero-shot), but smaller LLMs struggle.
+
+Adding examples in prompts (few-shot) sometimes helps, but:
+
+It doesn’t always work.
+
+It uses up the context window, leaving less room for new input.
+
+Fine-tuning is a better solution → adapting a base model to your specific task.
+
+2. What is Fine-Tuning?
+
+Pre-training: Train on massive amounts of raw text (general knowledge).
+
+Fine-tuning: Train on labeled examples (prompt → expected answer).
+
+Goal: Update the model so it learns to give better task-specific responses.
+
+3. Instruction Fine-Tuning
+
+Uses instruction + response pairs as training data.
+
+Example:
+
+Instruction: “Classify this review.”
+
+Completion: “Sentiment: Positive.”
+
+You can fine-tune for tasks like:
+
+Summarization (“Summarize the following text…”)
+
+Translation (“Translate this sentence…”)
+
+Classification (“Predict the sentiment…”)
+
+4. Full Fine-Tuning
+
+Updates all model weights.
+
+Requires high compute power & memory (similar to pre-training).
+
+Uses techniques like parallel computing and memory optimization.
+
+5. Creating Training Data
+
+Many datasets exist (e.g., Amazon reviews).
+
+But they need to be converted into instruction format.
+
+Prompt template libraries help by wrapping raw data into instruction prompts.
+
+Example: “Predict the associated rating: {review_body}”
+
+Split into training, validation, and test sets.
+
+6. Training Process
+
+Feed instruction + input to model → it generates a response.
+
+Compare response with correct label.
+
+Calculate loss (using cross-entropy on token probabilities).
+
+Update weights via backpropagation.
+
+Repeat for many examples across epochs.
+
+7. Evaluating Performance
+
+Validation set → Check accuracy during training.
+
+Test set → Final evaluation after fine-tuning.
+
+Result: A new “instruct model” (fine-tuned version of the base model).
+
+
+🔑 Fine-Tuning for Specific Tasks
+1. What is Fine-Tuning for a Task?
+
+You can fine-tune a pre-trained model to perform one task really well (e.g., summarization).
+
+This often only requires 500–1,000 examples.
+
+⚠️ Risk: The model may forget how to do other tasks → catastrophic forgetting.
+
+2. Catastrophic Forgetting
+
+Happens when fine-tuning overwrites the model’s knowledge.
+
+Example: After fine-tuning on sentiment analysis, the model forgets how to do named entity recognition.
+
+Essentially: model becomes too specialized, losing versatility.
+
+3. Strategies to Mitigate Forgetting
+
+✅ Accept it (if fine with one-task models)
+
+If you only care about one task (e.g., summarization only), forgetting isn’t a problem.
+
+🔀 Multitask Fine-Tuning
+
+Fine-tune the model on several tasks at once.
+
+Requires 50k–100k examples.
+
+Helps the model stay more general-purpose.
+
+🧩 Parameter-Efficient Fine-Tuning (PEFT)
+
+Instead of updating all weights, you train small task-specific layers.
+
+The base model stays intact → less forgetting.
+
+More memory-efficient and robust.
+
+
+🔑 Multitask Fine-Tuning & FLAN Models
+1. Multitask Fine-Tuning
+
+Trains a model on multiple tasks at once (e.g., summarization + entity recognition).
+
+Benefits:
+
+Improves performance across different tasks simultaneously.
+
+Reduces the risk of catastrophic forgetting.
+
+2. FLAN Models
+
+FLAN = Fine-tuned Language Net.
+
+A family of models trained with multitask fine-tuning.
+
+Example: FLAN-T5
+
+Fine-tuned on 473 datasets
+
+Covering 146 task categories
+
+Result = A versatile instruct model (good at many tasks out-of-the-box).
+
+3. Dataset Example: SAMSum
+
+A dataset for dialogue summarization.
+
+Contains 16,000 conversations with human-written summaries.
+
+Uses prompt templates to teach models how to summarize.
+
+Helps models learn summarization in real-world chat-like settings.
+
+🔑 Evaluation Metrics for Language Models
+1. Why Evaluation is Tricky
+
+Accuracy works well for deterministic models (like classification).
+
+But LLMs are non-deterministic → they may generate multiple valid answers.
+
+So, other metrics are needed for tasks like summarization or translation.
+
+2. ROUGE Metrics (Summarization)
+
+ROUGE-1 → measures overlap of single words (unigrams) between generated and reference summaries.
+
+Uses recall, precision, and F1.
+
+ROUGE-2 → measures overlap of pairs of words (bigrams).
+
+Captures word order and gives a more nuanced evaluation.
+
+3. BLEU Score (Translation)
+
+Evaluates machine translation quality.
+
+Works by averaging precision across n-grams (1-word, 2-word, 3-word sequences, etc.).
+
+Compares generated translation to reference translation(s).
+
+4. Overall Evaluation
+
+ROUGE and BLEU are useful diagnostics, but limited.
+
+Shouldn’t be the only evaluation criteria.
+
+Best practice → use established benchmarks and human evaluations for a fuller picture.
+
+
+🔑**Evaluation Datasets for LLMs**
+**1. Why Evaluation Datasets Matter**
+
+Choosing the right dataset is essential for fair and accurate evaluation.
+
+Good datasets should:
+
+Test specific skills (reasoning, common sense).
+
+Reveal risks (e.g., disinformation, bias).
+
+**2. Key Benchmarks**
+
+GLUE → General Language Understanding Evaluation
+
+Tests multiple NLP tasks like sentiment analysis, entailment, and similarity.
+
+SuperGLUE → A harder version of GLUE for more advanced models.
+
+MMLU → Massive Multitask Language Understanding
+
+Covers 57+ subjects (math, history, medicine, etc.).
+
+Measures broad knowledge and reasoning.
+
+BIG-bench → A large-scale benchmark that tests creative and complex problem-solving.
+
+**3. Holistic Evaluation Framework (HELM)**
+
+Designed for comprehensive evaluation of LLMs.
+
+Goes beyond accuracy by also measuring:
+
+Fairness
+
+Bias
+
+Transparency
+
+Performance across diverse scenarios
+
+Helps ensure models are responsible and trustworthy, not just powerful.
+
+
+🔑 **Understanding Parameter-Efficient Fine-Tuning (PEFT)**
+1. What is PEFT?
+
+Instead of updating all model parameters (full fine-tuning), PEFT only updates a small subset.
+
+**Benefits:**
+
+Much lower memory + compute requirements.
+
+Can train on consumer hardware (often just 1 GPU).
+
+Reduces risk of catastrophic forgetting.
+
+2. Types of PEFT Methods
+
+Selective Methods
+
+Fine-tune only some original parameters.
+
+Pros/Cons: Less compute, but may have mixed performance depending on what’s updated.
+
+Reparameterization Methods
+
+Add low-rank transformations of weights.
+
+Example: LoRA (Low-Rank Adaptation) → reduces how many parameters need training.
+
+Additive Methods
+
+Add new trainable components while keeping original weights frozen.
+
+Examples:
+
+Adapters → small extra layers inserted into the model.
+
+Soft prompts → trainable vectors prepended to inputs.
+
+3. Benefits of PEFT
+
+Smaller model footprint → saves storage.
+
+Enables task-specific adapters (parameters can be swapped in/out).
+
+Makes it easy to adapt one LLM to many tasks efficiently.
+
