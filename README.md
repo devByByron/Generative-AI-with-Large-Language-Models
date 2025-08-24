@@ -806,3 +806,53 @@ Enables task-specific adapters (parameters can be swapped in/out).
 
 Makes it easy to adapt one LLM to many tasks efficiently.
 
+🔑 LoRA and Prompt Tuning
+1. LoRA (Low-Rank Adaptation)
+
+Updates weights using rank decomposition matrices.
+
+Keeps most parameters frozen → only small matrices are trained.
+
+Benefits:
+
+Much more efficient than full fine-tuning.
+
+Requires far less compute & memory.
+
+Performance is comparable to full fine-tuning.
+
+Widely used because it’s a good balance of performance + efficiency.
+
+2. Prompt Tuning
+
+Adds trainable tokens (soft prompts) to the input.
+
+The model learns the best embeddings for these tokens during training.
+
+Difference from prompt engineering:
+
+Prompt engineering → manually crafted text instructions.
+
+Prompt tuning → virtual tokens in embedding space (not human language).
+
+3. Performance Comparison
+
+Prompt tuning performance depends on model size:
+
+For large models (~10B parameters) → performance is close to full fine-tuning.
+
+For smaller models → doesn’t perform as well as full fine-tuning.
+
+Advantages:
+
+Very efficient and flexible.
+
+Great for adapting large models to new tasks with minimal cost.
+
+4. Overall Insight
+
+LoRA → efficient, widely used, great all-around method.
+
+Prompt Tuning → highly efficient, especially effective with very large models.
+
+Both approaches = modern strategies for fine-tuning LLMs while saving compute resources.
