@@ -959,22 +959,94 @@ KL divergence measures how far the updated model drifts from the reference.
 
 Adding KL to the reward function penalizes large deviations, keeping the model aligned.
 
-Deployment Considerations
+**Deployment Considerations**
 
 Check how fast the model needs to respond and what compute resources are available.
 
 Decide if it needs to connect with external data or apps.
 
-Optimization Techniques
+**Optimization Techniques**
 
 Model Distillation: Use a large model to train a smaller one → saves compute/storage but keeps good performance.
 
 Quantization: Convert weights to lower precision → reduces memory and compute use, with small performance trade-offs.
 
-Pruning Techniques
+**Pruning Techniques**
 
 Model Pruning: Remove unneeded parameters → makes the model more efficient, but may require retraining.
 
+**Generative AI Project Lifecycle Cheatsheet**
+
+<img width="733" height="376" alt="image" src="https://github.com/user-attachments/assets/55a0c71f-d366-4a96-8f8b-22557dead5ff" />
+
+**Using LLMS in applications**
+**Challenges of LLMs**
+
+Knowledge Cutoff: Models only know data up to their training date, so they miss recent events.
+
+Math Limitations: They predict text, not calculations, so complex math answers can be wrong.
+
+Addressing Limitations with External Data
+
+RAG (Retrieval Augmented Generation): Lets models pull info from external sources to stay accurate and current.
+
+How it Works: A query encoder finds relevant documents, which are added to the model’s response.
+
+Benefits of RAG
+
+Improved Accuracy: Responses are more relevant and fact-based.
+
+Flexible Data Use: Works with databases, vector stores, and other formats for efficient retrieval.
+
+
+**ReAct Framework Overview**
+
+Combines chain of thought reasoning with action planning to enhance LLM capabilities.
+Developed by researchers at Princeton and Google in 2022, it uses structured prompts for problem-solving.
+Prompt Structure
+
+Prompts consist of a question requiring multiple steps, followed by a thought-action-observation trio.
+The model identifies actions from a limited set, such as searching or looking up information on Wikipedia.
+Execution Process
+
+The model iteratively searches for information, updates its context, and refines its reasoning until it reaches a conclusion.
+The framework emphasizes the importance of defining allowed actions to guide the LLM effectively.
+LangChain Framework
+
+LangChain provides modular components for building applications powered by LLMs, including prompt templates and memory storage.
+It supports flexible workflows through agents that interpret user input and determine necessary actions.
+Model Selection and Scaling
+
+Larger models are preferred for advanced prompting techniques, as they better handle structured tasks.
+Starting with a capable model can facilitate the development process and allow for future fine-tuning of smaller models.
+
+**LLMs application architecture**
+
+**Infrastructure Layer**
+
+This layer provides the necessary compute, storage, and network resources to host LLMs and application components, which can be on-premises or cloud-based.
+It includes deploying the appropriate LLMs for your application, considering real-time interaction needs.
+Model Interaction and Feedback
+
+Applications may need to retrieve information from external sources and return completions from LLMs to users or other applications.
+Mechanisms for capturing and storing outputs, as well as gathering user feedback for fine-tuning, are important for improving model performance.
+User Interface and Security
+
+The final layer consists of the user interface, such as a website or API, where users interact with the application.
+Security components are also integrated to ensure safe interactions with the application, highlighting that the model is just one part of the overall architecture for generative AI applications.
+
+**Responsible AI**
+
+**Challenges of Responsible AI**
+
+**Toxicity**: Refers to harmful or discriminatory language in AI outputs. Mitigation strategies include curating training data and training diverse human annotators.
+**Hallucinations**: Occurs when AI generates false or misleading information. Educating users and augmenting models with verified sources can help address this issue.
+**Intellectual Property**: Involves potential plagiarism and copyright issues. Solutions may include machine unlearning and governance systems to protect original content.
+
+**Best Practices for Practitioners**
+**Define Use Cases:** Clearly specify the intended applications of generative AI to assess risks effectively.
+**Iterate Over AI Lifecycle**: Emphasize continuous improvement and responsibility throughout the development and deployment stages.
+**Governance Policies**: Implement accountability measures for all stakeholders involved in the AI project.
 
 
 
