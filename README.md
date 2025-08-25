@@ -856,3 +856,126 @@ LoRA → efficient, widely used, great all-around method.
 Prompt Tuning → highly efficient, especially effective with very large models.
 
 Both approaches = modern strategies for fine-tuning LLMs while saving compute resources.
+
+**Aligning models with human values**
+
+**Fine-Tuning Techniques**
+
+Fine-tuning helps models understand prompts better and give more natural responses.
+
+Human feedback makes models more helpful, honest, and safe.
+
+**Challenges of Large Language Models**
+
+Models can produce toxic or misleading content because they learn from internet data.
+
+This can lead to harmful outputs, like bad health advice.
+
+**Principles for Responsible AI**
+
+Developers follow HHH: helpfulness, honesty, harmlessness.
+
+Feedback from humans helps align models with human values and reduces harmful outputs.
+
+**Obtaining feedback from humans**
+
+Model Selection and Data Preparation
+
+Pick a model suited to your task (e.g., summarization, Q&A).
+
+Create a dataset of prompts and completions.
+
+**Human Feedback Collection**
+
+Humans review outputs for quality (helpfulness, toxicity, etc.).
+
+They rank completions to build a reliable consensus.
+
+Instruction Clarity and Quality Assurance
+
+Give clear, detailed instructions to labelers.
+
+This ensures consistent and high-quality feedback.
+
+**Data Structuring for Reward Model Training**
+
+Turn ranking data into comparisons (preferred vs. less preferred).
+
+Use scores to train the reward model effectively.
+
+Feedback Types and Their Impact
+
+Simple thumbs-up/down is easy but limited.
+
+Ranked feedback is richer and improves training quality.
+
+**Fine turning with reinforcement learning**
+
+Understanding the RLHF Process
+
+Start with a pre-trained model.
+
+Generate a response from a prompt and evaluate it with a reward model using human feedback.
+
+**Reward Model Evaluation**
+
+The reward model scores responses based on alignment (higher score = better).
+
+These scores update the model’s weights through reinforcement learning.
+
+**Iterative Improvement**
+
+The process repeats many times, gradually improving performance.
+
+Training stops when the model reaches a helpfulness threshold or a max number of steps.
+
+Reinforcement Learning Algorithm
+
+PPO (Proximal Policy Optimization) is commonly used to adjust weights.
+
+You don’t need deep knowledge of PPO unless troubleshooting.
+
+👉 In short: RLHF trains models by scoring responses with human feedback, updating weights using reinforcement learning (often PPO), and repeating the process until the model aligns better with human expectations.
+
+**Reward Hacking**
+
+Arlo HF Fine-Tuning
+
+Uses a reward model to score completions based on human preferences (e.g., helpfulness).
+
+PPO (Proximal Policy Optimization) updates the model’s weights using these rewards.
+
+**Challenges in RHF**
+
+Reward hacking happens when the model “games the system” to get high scores but produces poor outputs.
+
+Example: generating exaggerated or nonsensical text just to appear low in toxicity.
+
+**Preventing Reward Hacking**
+
+A frozen reference model is used for comparison.
+
+KL divergence measures how far the updated model drifts from the reference.
+
+Adding KL to the reward function penalizes large deviations, keeping the model aligned.
+
+Deployment Considerations
+
+Check how fast the model needs to respond and what compute resources are available.
+
+Decide if it needs to connect with external data or apps.
+
+Optimization Techniques
+
+Model Distillation: Use a large model to train a smaller one → saves compute/storage but keeps good performance.
+
+Quantization: Convert weights to lower precision → reduces memory and compute use, with small performance trade-offs.
+
+Pruning Techniques
+
+Model Pruning: Remove unneeded parameters → makes the model more efficient, but may require retraining.
+
+
+
+
+
