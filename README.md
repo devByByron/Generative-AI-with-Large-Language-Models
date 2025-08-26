@@ -1040,12 +1040,16 @@ Security components are also integrated to ensure safe interactions with the app
 **Challenges of Responsible AI**
 
 **Toxicity**: Refers to harmful or discriminatory language in AI outputs. Mitigation strategies include curating training data and training diverse human annotators.
+
 **Hallucinations**: Occurs when AI generates false or misleading information. Educating users and augmenting models with verified sources can help address this issue.
+
 **Intellectual Property**: Involves potential plagiarism and copyright issues. Solutions may include machine unlearning and governance systems to protect original content.
 
 **Best Practices for Practitioners**
 **Define Use Cases:** Clearly specify the intended applications of generative AI to assess risks effectively.
+
 **Iterate Over AI Lifecycle**: Emphasize continuous improvement and responsibility throughout the development and deployment stages.
+
 **Governance Policies**: Implement accountability measures for all stakeholders involved in the AI project.
 
 
